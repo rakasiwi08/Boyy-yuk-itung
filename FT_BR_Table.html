@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabel Poin FT BR — Hitung Point By Boyz</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Exo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f0f0f0; font-family:'Exo 2',sans-serif; min-height:100vh; padding:24px 16px; }
+  .wrapper { max-width:1100px; margin:0 auto; }
+  .title-block { text-align:center; margin-bottom:20px; }
+  .title-block h1 { font-family:'Rajdhani',sans-serif; font-size:2rem; color:#FF6B00; letter-spacing:3px; text-transform:uppercase; text-shadow:0 0 30px rgba(255,107,0,0.4); }
+  .title-block p { color:#888; font-size:0.85rem; letter-spacing:2px; text-transform:uppercase; margin-top:4px; }
+  .table-wrap { border-radius:12px; overflow:hidden; border:1px solid rgba(255,107,0,0.3); box-shadow:0 0 40px rgba(255,107,0,0.1),0 4px 24px rgba(0,0,0,0.3); overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; table-layout:fixed; min-width:720px; }
+  .banner-cell { background:linear-gradient(90deg,#CC4400,#FF6B00,#CC4400); color:#fff; text-align:center; padding:12px; font-family:'Rajdhani',sans-serif; font-size:1.35rem; font-weight:700; letter-spacing:2px; border-bottom:2px solid rgba(255,255,255,0.15); }
+  .no-banner { background:linear-gradient(90deg,#CC4400,#FF6B00); color:#fff; text-align:center; font-family:'Rajdhani',sans-serif; font-size:0.9rem; font-weight:700; letter-spacing:1px; border-right:2px solid rgba(255,255,255,0.3); }
+  .map-header { text-align:center; padding:10px 4px; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:1px; color:#fff; border-bottom:1px solid rgba(255,255,255,0.1); }
+  .map-bermuda { background:#0D47A1; border-right:2px solid #1565C0; }
+  .map-purgatory { background:#1B5E20; border-right:2px solid #2E7D32; }
+  .map-kalahari { background:#F57F17; border-right:2px solid #F9A825; }
+  .map-allpoint { background:#4A148C; }
+  .map-juara { background:#B71C1C; }
+  .col-no-h, .col-nama-h { background:#111118; color:#aaa; text-align:center; padding:10px 4px; font-size:0.78rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,0.1); }
+  .col-no-h { border-right:2px solid rgba(255,107,0,0.4); }
+  .col-nama-h { border-right:2px solid rgba(255,107,0,0.3); }
+  .sub-header { text-align:center; padding:7px 4px; font-size:0.72rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; border-bottom:2px solid #FF6B00; }
+  .sub-bermuda { background:#1565C0; color:#FFD54F; }
+  .sub-purgatory { background:#2E7D32; color:#A5D6A7; }
+  .sub-kalahari { background:#F9A825; color:#4E342E; }
+  .sub-allpoint { background:#6A1B9A; color:#CE93D8; border-bottom:2px solid #FF6B00; }
+  .sub-juara { background:#C62828; color:#FFCDD2; border-bottom:2px solid #FF6B00; }
+  tr.row-even td { background:#ffffff; }
+  tr.row-odd td { background:#f4f4f4; }
+  tr.row-even td.td-all, tr.row-odd td.td-all { background:#f3e5f5 !important; }
+  tr.row-even td.td-juara, tr.row-odd td.td-juara { background:#ffebee !important; }
+  tr.row-even td.td-no, tr.row-odd td.td-no { background:#fff8f3 !important; }
+  td { text-align:center; padding:7px 4px; font-size:0.82rem; color:#111; border:1px solid #ddd; vertical-align:middle; }
+  td.td-no { font-weight:700; color:#FF6B00; font-family:'Rajdhani',sans-serif; font-size:0.9rem; border-right:2px solid rgba(255,107,0,0.3); }
+  td.td-nama { text-align:left; padding-left:10px; font-weight:600; color:#222; border-right:2px solid rgba(255,107,0,0.2); }
+  td.td-point { font-weight:600; color:#333; }
+  td.td-all { font-weight:800; color:#4A148C; font-size:0.9rem; border-left:2px solid rgba(74,20,140,0.3); }
+  td.td-juara { font-weight:800; font-size:0.95rem; border-left:2px solid rgba(183,28,28,0.3); }
+  td.td-juara.rank-1 { color:#FF6B00; font-size:1.4rem; background:#fff8e1 !important; }
+  td.td-juara.rank-2 { color:#707070; font-size:1.2rem; background:#f5f5f5 !important; }
+  td.td-juara.rank-3 { color:#A0522D; font-size:1.1rem; background:#fbe9e7 !important; }
+  td.td-juara.rank-other { color:#B71C1C; font-size:0.85rem; }
+  td.active-row { background:#FFF3E0 !important; outline:2px solid #FF6B00; }
+  [contenteditable="true"] { outline:none; cursor:text; transition:background 0.15s; }
+  [contenteditable="true"]:hover { background:#fff3e0 !important; }
+  [contenteditable="true"]:focus { background:#FFE0B2 !important; box-shadow:inset 0 0 0 2px #FF6B00; border-radius:3px; }
+  .col-no { width:42px; } .col-nama { width:150px; } .col-pt { width:75px; } .col-all { width:75px; } .col-juara { width:75px; }
+  .btn-wrap { text-align:center; margin-bottom:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .btn { padding:10px 24px; border:none; border-radius:6px; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:transform 0.1s; }
+  .btn:hover { transform:translateY(-1px); }
+  .btn-orange { background:linear-gradient(90deg,#CC4400,#FF6B00); color:white; box-shadow:0 4px 16px rgba(255,107,0,0.3); }
+  .btn-blue { background:linear-gradient(90deg,#1565C0,#1976D2); color:white; box-shadow:0 4px 16px rgba(21,101,192,0.3); }
+  .input-panel { margin-top:24px; background:#fff; border-radius:14px; border:2px solid rgba(255,107,0,0.25); box-shadow:0 4px 24px rgba(0,0,0,0.08); padding:18px 16px 22px; }
+  .panel-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:10px; }
+  .panel-title { color:#FF6B00; font-weight:800; font-size:1.1rem; letter-spacing:1px; }
+  .map-inds { display:flex; gap:8px; flex-wrap:wrap; }
+  .map-ind { padding:5px 14px; border-radius:20px; font-family:'Rajdhani',sans-serif; font-size:0.85rem; font-weight:700; letter-spacing:1px; background:#e0e0e0; color:#999; transition:all 0.2s; }
+  .map-ind.amb { background:#0D47A1; color:#fff; }
+  .map-ind.amp { background:#1B5E20; color:#fff; }
+  .map-ind.amk { background:#F57F17; color:#fff; }
+  .map-ind.dm { background:#888; color:#fff; }
+  .panel-status { background:#FFF3E0; border:1px solid #FF6B00; border-radius:20px; padding:5px 14px; color:#CC4400; font-weight:700; font-size:0.9rem; }
+  .panel-status.green { background:#E8F5E9; border-color:#2E7D32; color:#1B5E20; }
+  .panel-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .sec-title { font-weight:700; font-size:0.9rem; padding:6px 12px; border-radius:6px; margin-bottom:10px; text-transform:uppercase; letter-spacing:1px; color:#fff; }
+  .pos-title { background:#0D47A1; }
+  .kill-title { background:#B71C1C; }
+  .point-btns { display:flex; flex-wrap:wrap; gap:8px; }
+  .pt-btn { min-width:44px; padding:9px 5px; border:2px solid #ddd; border-radius:8px; background:#f9f9f9; color:#333; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; cursor:pointer; transition:all 0.15s; }
+  .pt-btn:hover { border-color:#FF6B00; background:#FFF3E0; color:#FF6B00; }
+  .pt-btn.selected { background:#FF6B00; color:white; border-color:#CC4400; transform:scale(1.08); }
+  .pt-btn:disabled { opacity:0.3; cursor:not-allowed; text-decoration:line-through; }
+  .kill-disp { font-family:'Rajdhani',sans-serif; font-size:2rem; font-weight:800; color:#B71C1C; text-align:center; background:#ffebee; border-radius:8px; padding:8px; border:2px solid #FFCDD2; margin-bottom:10px; }
+  .kill-btns { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
+  .kill-add { padding:8px 14px; border:2px solid #B71C1C; border-radius:8px; background:#fff; color:#B71C1C; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; cursor:pointer; transition:all 0.15s; }
+  .kill-add:hover { background:#B71C1C; color:white; }
+  .kill-reset { padding:8px 12px; border:2px solid #aaa; border-radius:8px; background:#fff; color:#888; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; cursor:pointer; }
+  .btn-row { display:flex; gap:10px; margin-top:16px; align-items:stretch; }
+  .back-btn { padding:10px 18px; border:2px solid #FF6B00; border-radius:8px; background:#fff; color:#FF6B00; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:1px; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+  .back-btn:hover { background:#FF6B00; color:#fff; }
+  .back-btn:disabled { border-color:#ddd; color:#ccc; cursor:not-allowed; background:#fff; }
+  .confirm-btn { flex:1; padding:14px; background:linear-gradient(90deg,#1B5E20,#2E7D32); color:white; border:none; border-radius:10px; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:2px; cursor:pointer; box-shadow:0 4px 16px rgba(27,94,32,0.3); transition:transform 0.1s; }
+  .confirm-btn:hover { transform:translateY(-1px); }
+  .voice-wrap { display:flex; gap:10px; align-items:center; margin-top:14px; flex-wrap:wrap; }
+  .mic-btn { display:flex; align-items:center; gap:8px; padding:10px 20px; border:none; border-radius:30px; background:linear-gradient(90deg,#880E4F,#C2185B); color:white; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:1px; cursor:pointer; box-shadow:0 4px 14px rgba(194,24,91,0.35); transition:all 0.2s; }
+  .mic-btn.listening { background:linear-gradient(90deg,#B71C1C,#E53935); animation:pulse 1s infinite; }
+  @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(229,57,53,0.5)} 70%{box-shadow:0 0 0 10px rgba(229,57,53,0)} 100%{box-shadow:0 0 0 0 rgba(229,57,53,0)} }
+  .voice-status { font-size:0.82rem; color:#888; font-style:italic; flex:1; min-width:120px; }
+  .voice-status.active { color:#C2185B; font-weight:700; font-style:normal; }
+  .voice-target { display:flex; gap:8px; }
+  .voice-target button { padding:7px 14px; border-radius:20px; border:2px solid #ddd; background:#f9f9f9; color:#555; font-family:'Rajdhani',sans-serif; font-size:0.85rem; font-weight:700; cursor:pointer; transition:all 0.15s; }
+  .voice-target button.active-target { border-color:#C2185B; background:#FCE4EC; color:#C2185B; }
+  .reset-btn { margin-top:16px; width:100%; padding:12px; background:linear-gradient(90deg,#333,#555); color:white; border:none; border-radius:10px; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:2px; cursor:pointer; transition:transform 0.1s; }
+  .reset-btn:hover { background:linear-gradient(90deg,#B71C1C,#E53935); transform:translateY(-1px); }
+  .tie-section { margin-top:24px; background:#fff; border-radius:14px; border:2px solid #E53935; box-shadow:0 4px 24px rgba(229,57,53,0.1); padding:20px; }
+  .tie-title { font-family:'Rajdhani',sans-serif; font-size:1.2rem; font-weight:700; color:#B71C1C; letter-spacing:1px; margin-bottom:20px; }
+  .tie-group { margin-bottom:28px; }
+  .tie-group-label { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:0.9rem; color:#B71C1C; letter-spacing:1px; margin-bottom:12px; text-transform:uppercase; }
+  .bracket-wrap { display:flex; align-items:center; }
+  .bracket-left { display:flex; flex-direction:column; min-width:160px; }
+  .bracket-slot { display:flex; align-items:center; height:48px; }
+  .bracket-card { flex:1; padding:8px 12px; border-radius:8px 0 0 8px; border:2px solid #FFCDD2; border-right:none; background:#ffebee; display:flex; align-items:center; justify-content:space-between; gap:8px; height:42px; }
+  .bracket-card.winner-card { border-color:#B71C1C; background:#fff0f0; }
+  .bc-name { font-weight:700; color:#222; font-size:0.82rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100px; }
+  .bc-kill { font-family:'Rajdhani',sans-serif; font-size:0.95rem; font-weight:700; color:#B71C1C; white-space:nowrap; flex-shrink:0; }
+  .bracket-right { display:flex; align-items:center; }
+  .winner-box { padding:10px 16px; border-radius:0 10px 10px 0; background:#B71C1C; color:#fff; min-width:130px; font-family:'Rajdhani',sans-serif; font-weight:700; font-size:0.9rem; letter-spacing:0.5px; line-height:1.4; border:2px solid #B71C1C; }
+  .winner-box .wrank { font-size:1.2rem; display:block; }
+  .podium-wrap { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; padding:12px; background:#fff8e1; border-radius:10px; border:1px solid #FFD700; }
+  .podium-label { font-family:'Rajdhani',sans-serif; font-weight:700; color:#888; font-size:0.8rem; width:100%; letter-spacing:1px; margin-bottom:4px; }
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:999; align-items:center; justify-content:center; }
+  .modal-overlay.active { display:flex; }
+  .modal { background:#fff; border-radius:12px; padding:28px; width:90%; max-width:420px; box-shadow:0 8px 40px rgba(0,0,0,0.3); }
+  .modal h3 { font-family:'Rajdhani',sans-serif; font-size:1.3rem; color:#FF6B00; margin-bottom:8px; letter-spacing:1px; }
+  .modal p { font-size:0.8rem; color:#777; margin-bottom:12px; }
+  .modal textarea { width:100%; height:200px; border:2px solid #ddd; border-radius:8px; padding:10px; font-size:0.9rem; font-family:'Exo 2',sans-serif; resize:none; outline:none; }
+  .modal textarea:focus { border-color:#FF6B00; }
+  .modal-btns { display:flex; gap:10px; margin-top:14px; justify-content:flex-end; }
+  .modal-btns button { padding:8px 22px; border:none; border-radius:6px; font-family:'Rajdhani',sans-serif; font-size:0.95rem; font-weight:700; cursor:pointer; letter-spacing:1px; }
+  .btn-apply { background:#FF6B00; color:white; }
+  .btn-cancel { background:#eee; color:#555; }
+  .legend { margin-top:14px; text-align:center; color:#555; font-size:0.75rem; }
+  .legend span { color:#FF6B00; font-weight:700; }
+
+  .ocr-section { margin-bottom:20px; background:#fff; border-radius:14px; border:2px solid rgba(255,107,0,0.25); box-shadow:0 4px 24px rgba(0,0,0,0.08); padding:18px 16px; }
+  .ocr-title { font-family:'Rajdhani',sans-serif; font-size:1.1rem; font-weight:700; color:#FF6B00; letter-spacing:1px; margin-bottom:12px; }
+  .ocr-drop { border:2px dashed #FF6B00; border-radius:10px; padding:20px; text-align:center; cursor:pointer; background:#fff8f3; margin-bottom:12px; position:relative; }
+  .ocr-drop input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+  .ocr-drop-text { color:#FF6B00; font-family:'Rajdhani',sans-serif; font-weight:700; font-size:1rem; letter-spacing:1px; }
+  .ocr-drop-sub { color:#aaa; font-size:0.75rem; margin-top:4px; }
+  .ocr-previews { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+  .ocr-preview-item { position:relative; }
+  .ocr-preview-item img { width:80px; height:80px; object-fit:cover; border-radius:8px; border:2px solid #FF6B00; }
+  .ocr-preview-item .rm-img { position:absolute; top:-6px; right:-6px; background:#B71C1C; color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:0.75rem; font-weight:700; }
+  .ocr-scan-btn { width:100%; padding:12px; background:linear-gradient(90deg,#4A148C,#6A1B9A); color:#fff; border:none; border-radius:10px; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:2px; cursor:pointer; }
+  .ocr-scan-btn:disabled { background:#ccc; cursor:not-allowed; }
+  .ocr-status { margin-top:10px; font-size:0.82rem; color:#888; text-align:center; min-height:20px; }
+  .ocr-status.loading { color:#4A148C; font-weight:700; }
+  .ocr-status.success { color:#1B5E20; font-weight:700; }
+  .ocr-status.error { color:#B71C1C; font-weight:700; }
+
+  @media print { body{background:white;padding:0;} .table-wrap{box-shadow:none;border:1px solid #ccc;} .no-print{display:none;} }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="title-block">
+    <h1>🏆 Tabel Poin — Fast Tour BR 🏆</h1>
+    <p>Free Fire Custom Room Tournament</p>
+  </div>
+  <div class="btn-wrap no-print">
+    <button class="btn btn-blue" onclick="openPasteModal()">📋 Tempel Nama Pemain</button>
+    <button class="btn btn-orange" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+  <div class="ocr-section no-print">
+    <div class="ocr-title">📸 Scan Nama Pemain dari Foto</div>
+    <div class="ocr-drop">
+      <input type="file" accept="image/*" multiple id="ocrInput" onchange="handleOcrFiles(this.files)">
+      <div class="ocr-drop-text">📁 Tap untuk upload foto hasil match</div>
+      <div class="ocr-drop-sub">Bisa 1 atau 2 foto · JPG/PNG</div>
+    </div>
+    <div class="ocr-previews" id="ocrPreviews"></div>
+    <button class="ocr-scan-btn" id="ocrScanBtn" onclick="scanNames()" disabled>🔍 Scan & Ambil Nama Pemain</button>
+    <div class="ocr-status" id="ocrStatus"></div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <colgroup>
+        <col class="col-no"><col class="col-nama">
+        <col class="col-pt"><col class="col-pt">
+        <col class="col-pt"><col class="col-pt">
+        <col class="col-pt"><col class="col-pt">
+        <col class="col-all"><col class="col-juara">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="no-banner" rowspan="3">NO</th>
+          <th class="banner-cell" colspan="9">✦ HITUNG POINT — BY BOYZ ✦</th>
+        </tr>
+        <tr>
+          <th class="col-nama-h" rowspan="2">NAMA PEMAIN</th>
+          <th class="map-header map-bermuda" colspan="2">🗺 BERMUDA</th>
+          <th class="map-header map-purgatory" colspan="2">🗺 PURGATORY</th>
+          <th class="map-header map-kalahari" colspan="2">🗺 KALAHARI</th>
+          <th class="map-header map-allpoint">ALL<br>POINT</th>
+          <th class="map-header map-juara">🏆 JUARA</th>
+        </tr>
+        <tr>
+          <th class="sub-header sub-bermuda">Pos Point</th>
+          <th class="sub-header sub-bermuda">Kill Point</th>
+          <th class="sub-header sub-purgatory">Pos Point</th>
+          <th class="sub-header sub-purgatory">Kill Point</th>
+          <th class="sub-header sub-kalahari">Pos Point</th>
+          <th class="sub-header sub-kalahari">Kill Point</th>
+          <th class="sub-header sub-allpoint"></th>
+          <th class="sub-header sub-juara"></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+  <div class="input-panel no-print">
+    <div class="panel-header">
+      <div class="panel-title">⚡ Input Cepat Point</div>
+      <div class="map-inds">
+        <div class="map-ind amb" id="indB">🗺 Bermuda</div>
+        <div class="map-ind" id="indP">🗺 Purgatory</div>
+        <div class="map-ind" id="indK">🗺 Kalahari</div>
+      </div>
+      <div class="panel-status" id="panelStatus">Pemain 1</div>
+    </div>
+    <div class="panel-grid">
+      <div>
+        <div class="sec-title pos-title">🏁 Point Posisi</div>
+        <div class="point-btns" id="posBtns"></div>
+      </div>
+      <div>
+        <div class="sec-title kill-title">💀 Kill Point</div>
+        <div class="kill-disp" id="killDisplay">0</div>
+        <div class="kill-btns">
+          <button class="kill-add" onclick="addKill(1)">+1</button>
+          <button class="kill-add" onclick="addKill(2)">+2</button>
+          <button class="kill-add" onclick="addKill(3)">+3</button>
+          <button class="kill-add" onclick="addKill(4)">+4</button>
+          <button class="kill-add" onclick="addKill(5)">+5</button>
+          <button class="kill-add" onclick="addKill(6)">+6</button>
+          <button class="kill-add" onclick="addKill(7)">+7</button>
+          <button class="kill-reset" onclick="resetKill()">Reset</button>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="back-btn" id="backBtn" onclick="goBack()" disabled>⬅ Kembali</button>
+      <button class="confirm-btn" id="confirmBtn" onclick="confirmEntry()">✅ Konfirmasi & Lanjut ke Pemain Berikutnya</button>
+    </div>
+    <div class="voice-wrap">
+      <button class="mic-btn" id="micBtn" onclick="toggleVoice()">🎤 Mulai Bicara</button>
+      <div class="voice-target">
+        <button id="targetPos" class="active-target" onclick="setVoiceTarget('pos')">🏁 Pos Point</button>
+        <button id="targetKill" onclick="setVoiceTarget('kill')">💀 Kill Point</button>
+      </div>
+      <div class="voice-status" id="voiceStatus">Tekan 🎤 lalu ucapkan angka</div>
+    </div>
+  </div>
+  <div class="legend no-print" style="margin-top:12px;">
+    <span>All Point</span> = otomatis dijumlah &nbsp;|&nbsp; <span>Juara</span> = otomatis ranking &nbsp;|&nbsp; 🥇🥈🥉 = Top 3
+  </div>
+  <div id="resetWrap" style="display:none; text-align:center; margin-top:16px;">
+    <button class="reset-btn no-print" onclick="resetTournament()">🔄 Reset Turnamen</button>
+  </div>
+  <div class="tie-section no-print" id="tieSection" style="display:none;">
+    <div class="tie-title">⚔️ Tiebreaker — All Point Sama</div>
+    <div id="tieBrackets"></div>
+  </div>
+  <div class="modal-overlay" id="pasteModal">
+    <div class="modal">
+      <h3>📋 Tempel Nama Pemain</h3>
+      <p>1 nama per baris, maks 12 nama</p>
+      <textarea id="pasteArea" placeholder="Tim A&#10;Tim B&#10;Tim C&#10;..."></textarea>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closePasteModal()">Batal</button>
+        <button class="btn-apply" onclick="applyNames()">✅ Terapkan</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const TOTAL=12;
+const POS=[12,11,10,9,8,7,6,5,4,3,2,1,0];
+const tbody=document.getElementById('tableBody');
+let curP=0,curMap='bermuda',selPos=null,kills=0;
+let usedB=new Set(),usedP=new Set(),usedK=new Set();
+let isDone=false,pOrder=[];
+
+function getUsed(){return curMap==='bermuda'?usedB:curMap==='purgatory'?usedP:usedK;}
+
+for(let i=1;i<=TOTAL;i++){
+  const tr=document.createElement('tr');
+  tr.className=i%2===1?'row-odd':'row-even';
+  tr.innerHTML=`<td class="td-no">${i}</td><td class="td-nama" contenteditable="true">${i}. Nama</td><td class="td-point" data-col="bp" contenteditable="true">0</td><td class="td-point" data-col="bk" contenteditable="true">0</td><td class="td-point" data-col="pp" contenteditable="true">0</td><td class="td-point" data-col="pk" contenteditable="true">0</td><td class="td-point" data-col="kp" contenteditable="true">0</td><td class="td-point" data-col="kk" contenteditable="true">0</td><td class="td-all" data-col="all">0</td><td class="td-juara" data-col="juara">—</td>`;
+  tbody.appendChild(tr);
+}
+pOrder=Array.from(tbody.querySelectorAll('tr'));
+
+const posBtns=document.getElementById('posBtns');
+POS.forEach((v,i)=>{
+  const btn=document.createElement('button');
+  btn.className='pt-btn';btn.innerText=v;btn.dataset.val=v;
+  btn.onclick=()=>selPos2(btn,v);
+  posBtns.appendChild(btn);
+});
+
+function selPos2(btn,val){
+  if(getUsed().has(val)&&val!==0)return;
+  document.querySelectorAll('.pt-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');selPos=val;
+}
+function addKill(n){kills+=n;document.getElementById('killDisplay').innerText=kills;}
+function resetKill(){kills=0;document.getElementById('killDisplay').innerText=0;}
+function getRows(){return Array.from(tbody.querySelectorAll('tr'));}
+function getIR(idx){return pOrder[idx]||null;}
+function gv(cell){const n=parseFloat(cell.innerText.replace(/[^0-9.\-]/g,''));return isNaN(n)?0:n;}
+
+function calcAll(tr){
+  const bp=gv(tr.querySelector('[data-col="bp"]')),bk=gv(tr.querySelector('[data-col="bk"]'));
+  const pp=gv(tr.querySelector('[data-col="pp"]')),pk=gv(tr.querySelector('[data-col="pk"]'));
+  const kp=gv(tr.querySelector('[data-col="kp"]')),kk=gv(tr.querySelector('[data-col="kk"]'));
+  const t=bp+bk+pp+pk+kp+kk;
+  tr.querySelector('[data-col="all"]').innerText=t;return t;
+}
+
+function calcJuara(){
+  const rows=getRows();
+  const sc=rows.map(tr=>({tr,total:parseFloat(tr.querySelector('[data-col="all"]').innerText)||0,bk:parseFloat(tr.querySelector('[data-col="bk"]').innerText)||0,pk:parseFloat(tr.querySelector('[data-col="pk"]').innerText)||0,kk:parseFloat(tr.querySelector('[data-col="kk"]').innerText)||0,nama:tr.querySelector('.td-nama').innerText}));
+  const sorted=[...sc].sort((a,b)=>b.total-a.total);
+  const rm=[];
+  for(let i=0;i<sorted.length;i++){if(i>0&&sorted[i].total===sorted[i-1].total)rm.push(rm[i-1]);else rm.push(i+1);}
+  sorted.forEach(({tr})=>tbody.appendChild(tr));
+  sorted.forEach(({tr},idx)=>{
+    const r=rm[idx];
+    tr.querySelector('.td-no').innerText=r;
+    tr.className=r%2===1?'row-odd':'row-even';
+    const c=tr.querySelector('[data-col="juara"]');c.className='td-juara';
+    if(r===1){c.innerText='🏆';c.classList.add('rank-1');}
+    else if(r===2){c.innerText='🥈';c.classList.add('rank-2');}
+    else if(r===3){c.innerText='🥉';c.classList.add('rank-3');}
+    else{c.innerText='#'+r;c.classList.add('rank-other');}
+  });
+  renderTie(sorted,rm);
+}
+
+function renderTie(sorted,rm){
+  const tg={};sorted.forEach((item,i)=>{const r=rm[i];if(!tg[r])tg[r]=[];tg[r].push({...item,rank:r});});
+  const ties=Object.values(tg).filter(g=>g.length>1);
+  const sec=document.getElementById('tieSection'),br=document.getElementById('tieBrackets');
+  if(ties.length===0){sec.style.display='none';return;}
+  sec.style.display='block';br.innerHTML='';
+  const top3=sorted.slice(0,3);
+  const pod=document.createElement('div');pod.className='podium-wrap';
+  pod.innerHTML='<div class="podium-label">🏆 PODIUM TURNAMEN</div>'+top3.map((p,i)=>{const icons=['🥇','🥈','🥉'],borders=['#FFD700','#C0C0C0','#CD7F32'];return `<div style="display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:8px;background:#fff;border:2px solid ${borders[i]};"><span style="font-size:1.3rem;">${icons[i]}</span><span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.95rem;">${p.nama}</span></div>`;}).join('');
+  br.appendChild(pod);
+  ties.forEach(group=>{
+    const rank=group[0].rank;
+    const byK=[...group].sort((a,b)=>(b.bk+b.pk+b.kk)-(a.bk+a.pk+a.kk));
+    const win=byK[0];
+    const rl=rank===1?'🥇 Juara 1':rank===2?'🥈 Juara 2':rank===3?'🥉 Juara 3':`Juara #${rank}`;
+    const n=byK.length,slH=48,totH=n*slH,midY=totH/2;
+    const gel=document.createElement('div');gel.className='tie-group';
+    gel.innerHTML=`<div class="tie-group-label">⚔️ Rebutan ${rl} — All Point Sama (${group[0].total} poin) · Penentu: Total Kill</div>`;
+    const bw=document.createElement('div');bw.className='bracket-wrap';
+    const lc=document.createElement('div');lc.className='bracket-left';
+    byK.forEach((p,i)=>{const sl=document.createElement('div');sl.className='bracket-slot';const tk=p.bk+p.pk+p.kk;sl.innerHTML=`<div class="bracket-card${i===0?' winner-card':''}"><span class="bc-name">${i===0?'👑 ':''}${p.nama}</span><span class="bc-kill">${tk}💀</span></div>`;lc.appendChild(sl);});
+    const ns='http://www.w3.org/2000/svg';const svg=document.createElementNS(ns,'svg');svg.setAttribute('width',36);svg.setAttribute('height',totH);
+    byK.forEach((_,i)=>{const y=i*slH+slH/2;const h=document.createElementNS(ns,'line');h.setAttribute('x1',0);h.setAttribute('y1',y);h.setAttribute('x2',21);h.setAttribute('y2',y);h.setAttribute('stroke',i===0?'#B71C1C':'#FFCDD2');h.setAttribute('stroke-width',i===0?'2.5':'1.5');svg.appendChild(h);});
+    const vl=document.createElementNS(ns,'line');vl.setAttribute('x1',21);vl.setAttribute('y1',slH/2);vl.setAttribute('x2',21);vl.setAttribute('y2',(n-1)*slH+slH/2);vl.setAttribute('stroke','#FFCDD2');vl.setAttribute('stroke-width','1.5');svg.appendChild(vl);
+    const wl=document.createElementNS(ns,'line');wl.setAttribute('x1',21);wl.setAttribute('y1',midY);wl.setAttribute('x2',36);wl.setAttribute('y2',midY);wl.setAttribute('stroke','#B71C1C');wl.setAttribute('stroke-width','2.5');svg.appendChild(wl);
+    const rc=document.createElement('div');rc.className='bracket-right';rc.innerHTML=`<div class="winner-box"><span class="wrank">${rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'#'+rank}</span>${rl.replace(/🥇|🥈|🥉/,'').trim()}<br><strong>${win.nama}</strong></div>`;
+    bw.appendChild(lc);bw.appendChild(svg);bw.appendChild(rc);gel.appendChild(bw);br.appendChild(gel);
+  });
+}
+
+function recalcAll(){tbody.querySelectorAll('tr').forEach(tr=>calcAll(tr));calcJuara();}
+
+function hlRow(){
+  getRows().forEach(tr=>tr.querySelectorAll('td').forEach(td=>td.classList.remove('active-row')));
+  const atr=getIR(curP);if(atr){atr.querySelectorAll('td').forEach(td=>td.classList.add('active-row'));atr.scrollIntoView({behavior:'smooth',block:'center'});}
+}
+
+function updInds(){
+  document.getElementById('indB').className='map-ind'+(curMap==='bermuda'?' amb':' dm');
+  document.getElementById('indP').className='map-ind'+(curMap==='purgatory'?' amp':curMap==='bermuda'?'':' dm');
+  document.getElementById('indK').className='map-ind'+(curMap==='kalahari'?' amk':'');
+}
+
+function updStatus(){
+  const st=document.getElementById('panelStatus');
+  if(curP>=TOTAL){document.querySelector('.input-panel').style.display='none';document.getElementById('resetWrap').style.display='block';getRows().forEach(tr=>tr.querySelectorAll('td').forEach(td=>td.classList.remove('active-row')));isDone=true;return;}
+  const atr=getIR(curP);const name=atr?.querySelector('.td-nama')?.innerText||`Pemain ${curP+1}`;
+  const ml=curMap==='bermuda'?'🗺 Bermuda':curMap==='purgatory'?'🗺 Purgatory':'🗺 Kalahari';
+  st.innerText=`${ml} — ${name}`;st.classList.toggle('green',curMap==='kalahari');
+  updInds();hlRow();
+}
+
+function updPosBtns(){
+  const used=getUsed();
+  document.querySelectorAll('.pt-btn').forEach(btn=>{const v=parseInt(btn.dataset.val);btn.disabled=used.has(v)&&v!==0;});
+}
+
+function updBackBtn(){
+  const can=curP>0||(curMap!=='bermuda');
+  const btn=document.getElementById('backBtn');if(btn)btn.disabled=!can||isDone;
+}
+
+function confirmEntry(){
+  if(selPos===null){alert('Pilih dulu Point Posisi!');return;}
+  const tr=getIR(curP);if(!tr)return;
+  if(curMap==='bermuda'){tr.querySelector('[data-col="bp"]').innerText=selPos;tr.querySelector('[data-col="bk"]').innerText=kills;}
+  else if(curMap==='purgatory'){tr.querySelector('[data-col="pp"]').innerText=selPos;tr.querySelector('[data-col="pk"]').innerText=kills;}
+  else{tr.querySelector('[data-col="kp"]').innerText=selPos;tr.querySelector('[data-col="kk"]').innerText=kills;}
+  if(selPos!==0)getUsed().add(selPos);
+  calcAll(tr);calcJuara();
+  document.querySelectorAll('.pt-btn').forEach(b=>b.classList.remove('selected'));
+  selPos=null;resetKill();curP++;
+  if(curP>=TOTAL){
+    if(curMap==='bermuda'){
+      curMap='purgatory';curP=0;
+      // Rebuild pOrder based on current sorted display order
+      pOrder=Array.from(tbody.querySelectorAll('tr'));
+    } else if(curMap==='purgatory'){
+      curMap='kalahari';curP=0;
+      pOrder=Array.from(tbody.querySelectorAll('tr'));
+    }
+  }
+  updPosBtns();updStatus();updBackBtn();
+}
+
+function goBack(){
+  if(isDone)return;
+  if(curP>0){curP--;}
+  else if(curMap==='purgatory'){curMap='bermuda';curP=TOTAL-1;}
+  else if(curMap==='kalahari'){curMap='purgatory';curP=TOTAL-1;}
+  else return;
+  const tr=getIR(curP);
+  if(tr){
+    const col=curMap==='bermuda'?'bp':curMap==='purgatory'?'pp':'kp';
+    const colK=curMap==='bermuda'?'bk':curMap==='purgatory'?'pk':'kk';
+    const old=parseFloat(tr.querySelector('[data-col="'+col+'"]').innerText)||0;
+    if(old!==0)getUsed().delete(old);
+    tr.querySelector('[data-col="'+col+'"]').innerText='0';
+    tr.querySelector('[data-col="'+colK+'"]').innerText='0';
+    calcAll(tr);calcJuara();
+  }
+  document.querySelectorAll('.pt-btn').forEach(b=>b.classList.remove('selected'));
+  selPos=null;kills=0;document.getElementById('killDisplay').innerText=0;
+  updPosBtns();updStatus();updBackBtn();
+}
+
+function resetTournament(){
+  if(!confirm('Reset semua data? Semua point akan dihapus.'))return;
+  pOrder.forEach(tr=>{['bp','bk','pp','pk','kp','kk'].forEach(c=>tr.querySelector('[data-col="'+c+'"]').innerText='0');calcAll(tr);});
+  curP=0;curMap='bermuda';selPos=null;kills=0;
+  usedB=new Set();usedP=new Set();usedK=new Set();isDone=false;
+  pOrder=Array.from(tbody.querySelectorAll('tr'));
+  document.getElementById('killDisplay').innerText=0;
+  document.querySelectorAll('.pt-btn').forEach(b=>{b.classList.remove('selected');b.disabled=false;});
+  document.getElementById('confirmBtn').disabled=false;
+  const bb=document.getElementById('backBtn');if(bb)bb.disabled=true;
+  document.querySelector('.input-panel').style.display='block';
+  document.getElementById('resetWrap').style.display='none';
+  document.getElementById('tieSection').style.display='none';
+  calcJuara();updStatus();updPosBtns();updBackBtn();
+}
+
+tbody.addEventListener('blur',e=>{
+  const c=e.target;const col=c.dataset.col;
+  if(!col||col==='all'||col==='juara')return;
+  // If this is a pos point col, update used sets
+  const isPosCol=col==='bp'||col==='pp'||col==='kp';
+  if(isPosCol){
+    const set=col==='bp'?usedB:col==='pp'?usedP:usedK;
+    // Remove all values from this set that belong to this map's pos col
+    // Re-scan all rows to rebuild used set for that map
+    const allRows=Array.from(tbody.querySelectorAll('tr'));
+    if(col==='bp'){usedB=new Set();allRows.forEach(tr=>{const v=parseFloat(tr.querySelector('[data-col="bp"]').innerText)||0;if(v!==0)usedB.add(v);});}
+    else if(col==='pp'){usedP=new Set();allRows.forEach(tr=>{const v=parseFloat(tr.querySelector('[data-col="pp"]').innerText)||0;if(v!==0)usedP.add(v);});}
+    else if(col==='kp'){usedK=new Set();allRows.forEach(tr=>{const v=parseFloat(tr.querySelector('[data-col="kp"]').innerText)||0;if(v!==0)usedK.add(v);});}
+    updPosBtns();
+  }
+  calcAll(c.closest('tr'));calcJuara();
+},true);
+tbody.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();e.target.blur();}});
+tbody.addEventListener('focus',e=>{const c=e.target;if(c.contentEditable==='true'&&c.dataset.col){setTimeout(()=>{const r=document.createRange();r.selectNodeContents(c);const s=window.getSelection();s.removeAllRanges();s.addRange(r);},0);}},true);
+
+function openPasteModal(){document.getElementById('pasteModal').classList.add('active');setTimeout(()=>document.getElementById('pasteArea').focus(),100);}
+function closePasteModal(){document.getElementById('pasteModal').classList.remove('active');document.getElementById('pasteArea').value='';}
+function applyNames(){const names=document.getElementById('pasteArea').value.split('\n').map(n=>n.trim()).filter(Boolean);pOrder.forEach((tr,i)=>{if(names[i])tr.querySelector('.td-nama').innerText=names[i];});closePasteModal();updStatus();}
+document.getElementById('pasteModal').addEventListener('click',function(e){if(e.target===this)closePasteModal();});
+
+let recognition=null,isListening=false,vTarget='pos';
+const w2n={'nol':0,'kosong':0,'zero':0,'satu':1,'one':1,'dua':2,'two':2,'tiga':3,'three':3,'empat':4,'four':4,'lima':5,'five':5,'enam':6,'six':6,'tujuh':7,'seven':7,'delapan':8,'eight':8,'sembilan':9,'nine':9,'sepuluh':10,'ten':10,'sebelas':11,'eleven':11,'dua belas':12,'twelve':12};
+function parseVN(text){const l=text.toLowerCase().trim();const d=parseInt(l);if(!isNaN(d))return d;for(const[w,n]of Object.entries(w2n)){if(l.includes(w))return n;}return null;}
+function setVoiceTarget(t){vTarget=t;document.getElementById('targetPos').classList.toggle('active-target',t==='pos');document.getElementById('targetKill').classList.toggle('active-target',t==='kill');}
+function applyVN(num){
+  if(vTarget==='pos'){const btns=document.querySelectorAll('.pt-btn');let found=false;btns.forEach(btn=>{if(parseInt(btn.dataset.val)===num&&!btn.disabled){selPos2(btn,num);found=true;document.getElementById('voiceStatus').textContent='✅ Pos Point: '+num;}});if(!found)document.getElementById('voiceStatus').textContent='⚠️ "'+num+'" sudah dipakai atau tidak valid';}
+  else{kills+=num;document.getElementById('killDisplay').innerText=kills;document.getElementById('voiceStatus').textContent='✅ Kill +'+num+' = '+kills;}
+}
+function toggleVoice(){if(!('webkitSpeechRecognition'in window)&&!('SpeechRecognition'in window)){alert('Pakai Chrome ya untuk fitur voice!');return;}isListening?stopVoice():startVoice();}
+function startVoice(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;recognition=new SR();recognition.lang='id-ID';recognition.continuous=false;recognition.interimResults=false;
+  recognition.onstart=()=>{isListening=true;const btn=document.getElementById('micBtn');btn.classList.add('listening');btn.textContent='🔴 Mendengarkan...';document.getElementById('voiceStatus').className='voice-status active';document.getElementById('voiceStatus').textContent='Sedang mendengarkan...';};
+  recognition.onresult=e=>{const t=e.results[0][0].transcript;document.getElementById('voiceStatus').textContent='🗣 "'+t+'"';const num=parseVN(t);if(num!==null)applyVN(num);else document.getElementById('voiceStatus').textContent='❓ Tidak dikenali: "'+t+'"';stopVoice();};
+  recognition.onerror=e=>{document.getElementById('voiceStatus').textContent='❌ Error: '+e.error;stopVoice();};
+  recognition.onend=()=>stopVoice();recognition.start();}
+function stopVoice(){isListening=false;if(recognition){try{recognition.stop();}catch(e){}}const btn=document.getElementById('micBtn');btn.classList.remove('listening');btn.textContent='🎤 Mulai Bicara';document.getElementById('voiceStatus').className='voice-status';}
+
+
+const GKEY='AIzaSyAfV09K8elbdkQSjXm--Wtq7VaFOEjE_gA';
+let ocrFiles=[];
+
+function handleOcrFiles(files){
+  Array.from(files).forEach(f=>{if(ocrFiles.length<2)ocrFiles.push(f);});
+  renderOcrPreviews();
+  document.getElementById('ocrScanBtn').disabled=ocrFiles.length===0;
+  document.getElementById('ocrInput').value='';
+}
+
+function renderOcrPreviews(){
+  const wrap=document.getElementById('ocrPreviews');wrap.innerHTML='';
+  ocrFiles.forEach((f,i)=>{
+    const url=URL.createObjectURL(f);
+    const item=document.createElement('div');item.className='ocr-preview-item';
+    item.innerHTML=`<img src="${url}"><button class="rm-img" onclick="removeOcr(${i})">✕</button>`;
+    wrap.appendChild(item);
+  });
+}
+
+function removeOcr(idx){ocrFiles.splice(idx,1);renderOcrPreviews();document.getElementById('ocrScanBtn').disabled=ocrFiles.length===0;}
+
+function fileToB64(file){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>res(r.result.split(',')[1]);
+    r.onerror=rej;
+    r.readAsDataURL(file);
+  });
+}
+
+async function scanNames(){
+  if(ocrFiles.length===0)return;
+  const btn=document.getElementById('ocrScanBtn');
+  const status=document.getElementById('ocrStatus');
+  btn.disabled=true;
+  status.className='ocr-status loading';
+  status.textContent='⏳ Sedang scan foto... mohon tunggu';
+  try{
+    const parts=[];
+    for(const f of ocrFiles){
+      const b64=await fileToB64(f);
+      parts.push({inlineData:{mimeType:f.type||'image/jpeg',data:b64}});
+    }
+    parts.push({text:`Ini screenshot hasil match Free Fire. Setiap kotak posisi berisi nama pemain/squad.
+
+Ambil HANYA nama pemain/squad di pojok kiri atas setiap kotak posisi, urut dari posisi 1 ke terakhir.
+Abaikan simbol aneh, angka kill, dan teks lain. Cukup nama bersihnya.
+Jika ada 2 foto, gabungkan semua nama tanpa duplikat.
+
+Balas HANYA JSON array, contoh: ["Meooeiei","Adam V3","mansaCees"]`});
+
+    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GKEY}`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts}]})
+    });
+    const data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    const text=data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+    const match=text.match(/\[[\s\S]*?\]/);
+    if(!match)throw new Error('Format tidak dikenali');
+    const names=JSON.parse(match[0]);
+    if(!Array.isArray(names)||names.length===0)throw new Error('Tidak ada nama ditemukan');
+
+    // Show in paste modal for review
+    document.getElementById('pasteModal').querySelector('h3').textContent='✅ Hasil Scan — Edit jika perlu';
+    document.getElementById('pasteModal').querySelector('p').textContent='Cek nama, hapus yang salah, lalu Terapkan.';
+    document.getElementById('pasteArea').value=names.join('\n');
+    document.getElementById('pasteModal').classList.add('active');
+    status.className='ocr-status success';
+    status.textContent='✅ Scan selesai! Cek nama di popup.';
+  }catch(err){
+    status.className='ocr-status error';
+    status.textContent='❌ Gagal: '+(err.message||'Coba lagi');
+  }finally{
+    btn.disabled=false;
+  }
+}
+
+recalcAll();updStatus();updPosBtns();updBackBtn();
+</script>
+</body>
+</html>
